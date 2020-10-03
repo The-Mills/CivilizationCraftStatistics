@@ -4,6 +4,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Map;
 
 public class StatisticsRepository implements Repository
 {
@@ -11,10 +12,23 @@ public class StatisticsRepository implements Repository
 	private Statement queryExecutor;
 	private ResultSet queryResult;
 	
-	public StatisticsRepository() throws SQLException
+	/**
+	 * Establishes connection to the database and instantiates query objects.
+	 * @param connectionInformation - An array of exactly 5 strings listing, in order: IP, Port, database name, username, and password.
+	 * @throws SQLException
+	 */
+	public StatisticsRepository(Map<String, String> credentials)
 	{
-		mySQLConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/civilizationcraft_statistics", "admin", "admin");
-		queryExecutor = mySQLConnection.createStatement();
+		try
+		{
+			mySQLConnection = DriverManager.getConnection("jdbc:mysql://" + credentials.get("ip") + ":" + credentials.get("port") 
+				+ "/" + credentials.get("database-name"), credentials.get("username"), credentials.get("password"));
+			queryExecutor = mySQLConnection.createStatement();
+		}
+		catch(SQLException e)
+		{
+			System.out.println(e);
+		}
 	}
 	
 	// See Repository interface for documentation on the below methods..

@@ -1,10 +1,12 @@
 package statistics_tracker;
+
+import java.sql.SQLException;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.block.BlockBreakEvent;
 import repository.Repository;
-import java.sql.SQLException;
+
 
 public class StatisticsEventListener implements Listener
 {
@@ -28,6 +30,7 @@ public class StatisticsEventListener implements Listener
 			if(event.getBlock().getType().name().equals("STONE"))
 				statisticsRepository.incrementMinedCount(event.getPlayer().getUniqueId().toString(), event.getBlock().getType().name());
 		}
+		catch(NullPointerException e) {System.out.println(e);}
 		catch(SQLException e)
 		{
 			// Handle this appropriately. To be determined.
@@ -49,6 +52,7 @@ public class StatisticsEventListener implements Listener
 		{
 			statisticsRepository.registerNewUser(event.getPlayer().getUniqueId().toString());
 		}
+		catch(NullPointerException e) {System.out.println(e);}
 		catch(SQLException e)
 		{
 			System.out.println(e);

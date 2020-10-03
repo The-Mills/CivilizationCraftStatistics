@@ -1,0 +1,11 @@
+# Description of the Below Fields:
+# ip                 - The IP address of your MySQL database server.
+# port               - The port your MySQL database is listening on.
+# database-name      - The name of your MySQL database.
+# username           - The username you'll use to login to your MySQL database.
+# password           - The password for the username you're logging in with.
+ip: data.base.ip.address
+port: 1234
+database-name: mysql_database_name
+username: mysql_user_username
+password: mysql_user_password
