@@ -5,14 +5,15 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.Material;
 import repository.Repository;
 
 
-public class StatisticsEventListener implements Listener
+public class EventListener implements Listener
 {
 	private Repository statisticsRepository;
 	
-	public StatisticsEventListener(Repository statsRepo)
+	public EventListener(Repository statsRepo)
 	{
 		statisticsRepository = statsRepo;
 	}
@@ -27,8 +28,8 @@ public class StatisticsEventListener implements Listener
 	{
 		try 
 		{
-			if(event.getBlock().getType().name().equals("STONE"))
-				statisticsRepository.incrementMinedCount(event.getPlayer().getUniqueId().toString(), event.getBlock().getType().name());
+			if(event.getBlock().getType() == Material.STONE)
+				statisticsRepository.incrementMinedCount(event.getPlayer().getUniqueId().toString(), event.getBlock().getType());
 		}
 		catch(NullPointerException e) {System.out.println(e);}
 		catch(SQLException e)

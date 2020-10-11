@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
+import org.bukkit.Material;
 
 public class StatisticsRepository implements Repository
 {
@@ -12,17 +13,13 @@ public class StatisticsRepository implements Repository
 	private Statement queryExecutor;
 	private ResultSet queryResult;
 	
-	/**
-	 * Establishes connection to the database and instantiates query objects.
-	 * @param connectionInformation - An array of exactly 5 strings listing, in order: IP, Port, database name, username, and password.
-	 * @throws SQLException
-	 */
-	public StatisticsRepository(Map<String, String> credentials)
+
+	public void openConnection(Map<String, String> credentials)
 	{
 		try
 		{
 			mySQLConnection = DriverManager.getConnection("jdbc:mysql://" + credentials.get("ip") + ":" + credentials.get("port") 
-				+ "/" + credentials.get("database-name"), credentials.get("username"), credentials.get("password"));
+				+ "/" + credentials.get("database-name") + "", credentials.get("username"), credentials.get("password"));
 			queryExecutor = mySQLConnection.createStatement();
 		}
 		catch(SQLException e)
@@ -31,7 +28,6 @@ public class StatisticsRepository implements Repository
 		}
 	}
 	
-	// See Repository interface for documentation on the below methods..
 	public void closeConnection() throws SQLException
 	{
 		mySQLConnection.close();
@@ -39,11 +35,16 @@ public class StatisticsRepository implements Repository
 	
 	public void registerNewUser(String UUID) throws SQLException
 	{
-		queryExecutor.execute("INSERT INTO playerstats(UUID) VALUES('" + UUID + "')");
+		queryResult = queryExecutor.executeQuery("SELECT UUID FROM PlayerStats WHERE UUID = '" + UUID + "'");
+		if(!queryResult.next())
+		{
+			queryExecutor.execute("INSERT INTO playerstats(UUID) VALUES('" + UUID + "')");
+			System.out.println("Added new UUID");
+		}
 	}
 	
-	public void incrementMinedCount(String UUID, String blockType) throws SQLException
+	public void incrementMinedCount(String UUID, Material blockType) throws SQLException
 	{
-		queryExecutor.execute("UPDATE playerstats SET " + blockType + "Mined = " + blockType + "Mined + 1 WHERE UUID = '" + UUID + "'");
+		queryExecutor.execute("UPDATE playerstats SET mined" + blockType + " = mined" + blockType + " + 1 WHERE UUID = '" + UUID + "'");
 	}
 }

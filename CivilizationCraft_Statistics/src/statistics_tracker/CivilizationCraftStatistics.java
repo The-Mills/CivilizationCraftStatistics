@@ -11,7 +11,7 @@ import repository.StatisticsRepository;
 
 public class CivilizationCraftStatistics extends JavaPlugin
 {
-	private Repository statisticsRepository;
+	private Repository statisticsRepository = new StatisticsRepository();
 	
 	/**
 	 * Fired when the plugin is enabled
@@ -19,10 +19,14 @@ public class CivilizationCraftStatistics extends JavaPlugin
 	@Override
 	public void onEnable()
 	{	
-		statisticsRepository = new StatisticsRepository(getRepositoryCredentials()); 
-		getServer().getPluginManager().registerEvents(new StatisticsEventListener(statisticsRepository), this);
+		statisticsRepository.openConnection(getRepositoryCredentials());
+		getServer().getPluginManager().registerEvents(new EventListener(statisticsRepository), this);
 	}
 	
+	/**
+	 * Determines whether the plugin's config.yml file exists in the correct directory.
+	 * @return - True, if the file exists in the proper directory. Otherwise false.
+	 */
 	public boolean doesConfigExist()
 	{
 		File filePath = new File(getDataFolder(), "config.yml");
@@ -32,6 +36,11 @@ public class CivilizationCraftStatistics extends JavaPlugin
 		return true;
 	}
 	
+	/**
+	 * Gets all credentials and address information needed to connect to the statistics database
+	 * from the configuration file.
+	 * @return - A Map whose keys are the YAML variable names and whose values are the key's values.
+	 */
 	public Map<String, String> getRepositoryCredentials()
 	{
 		Map<String, String> credentials = new HashMap<String, String>();
@@ -57,10 +66,6 @@ public class CivilizationCraftStatistics extends JavaPlugin
 		else
 			getLogger().info("ERROR: ./plugins/CivilizationCraftStatisticsTracker/config.yml not found. "
 					+ "Plugin will be unable to connect to the database!");
-		
-		for(String key : credentials.keySet())
-			System.out.println(key + ": '" + credentials.get(key) +"'");
-		
 		return credentials;
 	}
 	
