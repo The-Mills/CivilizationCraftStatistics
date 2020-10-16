@@ -28,8 +28,7 @@ public class EventListener implements Listener
 	{
 		try 
 		{
-			if(event.getBlock().getType() == Material.STONE)
-				statisticsRepository.incrementMinedCount(event.getPlayer().getUniqueId().toString(), event.getBlock().getType());
+			statisticsRepository.incrementMinedCount(event.getPlayer().getUniqueId().toString(), event.getBlock().getType());
 		}
 		catch(NullPointerException e) {System.out.println(e);}
 		catch(SQLException e)

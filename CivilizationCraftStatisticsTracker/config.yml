@@ -9,3 +9,28 @@ port: 1234
 database-name: mysql_database_name
 username: mysql_user_username
 password: mysql_user_password
+# Description of tracked-mined-materials:
+# 
+# This list specifies to the plugin and database what mineable blocks
+# you want to track. If a player breaks a block in this list, your database
+# will add that to the total number of blocks of this material that they've broken.
+#
+# You SHOULD NOT create any columns in your database manually. When the plugin is
+# enabled, it will query the database automatically and see if any material in this list
+# does not have a column allocated to it. It will then create one column for each missing
+# block, as needed. Hence, if you want to start tracking additional blocks, simply add
+# them to this list and restart your Spigot server.
+#
+# To stop tracking a block, you must remove it from this list AND delete the associated
+# column from your database manually. This plugin will not automatically delete any columns.
+#
+# THE ORDER YOU LIST BLOCKS IN IS IMPORTANT. The materials you expect players to break
+# most frequently should be at the top of the list. This will greatly increase your plugin's
+# speed in handling the most common cases of block-mining.
+#
+# Valid block-types that can go in this list are (as of version 1.16.2):
+tracked-mined-materials:
+    - STONE
+    - SAND
+    - DIRT
+    - DRIT
