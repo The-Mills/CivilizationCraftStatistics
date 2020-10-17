@@ -34,3 +34,9 @@ tracked-mined-materials:
     - SAND
     - DIRT
     - DRIT
+tracked-placed-materials:
+    -
+    - STONE
+    - SAND
+    - DIRT
+    - DRIT

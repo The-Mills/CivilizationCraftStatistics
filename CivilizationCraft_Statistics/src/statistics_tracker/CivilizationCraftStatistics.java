@@ -27,7 +27,7 @@ public class CivilizationCraftStatistics extends JavaPlugin
 			getLogger().info("./plugins/CivilizationCraftStatisticsTracker/config.yml found. "
 					+ "Performing setup operations");
 			
-			statisticsRepository.openConnection(getRepositoryCredentials(), getMaterialList("tracked-mined-materials"), getLogger());
+			statisticsRepository.openConnection(getRepositoryCredentials(), getMaterialList("tracked-mined-materials"), getMaterialList("tracked-placed-materials"), getLogger());
 			getServer().getPluginManager().registerEvents(new EventListener(statisticsRepository), this);
 			
 			getLogger().info("Connection and setup process complete.");

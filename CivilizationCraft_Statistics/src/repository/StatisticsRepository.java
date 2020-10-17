@@ -19,8 +19,9 @@ public class StatisticsRepository implements Repository
 	private DatabaseMetaData metaData;
 
 	private List<Material> trackedMinedMaterials;
+	private List<Material> trackedPlacedMaterials;
 	
-	public void openConnection(Map<String, String> credentials, List<Material> tracked_mined_materials, Logger pluginLogger)
+	public void openConnection(Map<String, String> credentials, List<Material> tracked_mined_materials, List<Material> tracked_placed_materials, Logger pluginLogger)
 	{
 		try
 		{
@@ -35,6 +36,9 @@ public class StatisticsRepository implements Repository
 			for(Material currentMaterial: tracked_mined_materials)
 				if(!metaData.getColumns(null, null, null, "mined" + currentMaterial).next())
 					newColumnNames.add("mined" + currentMaterial);
+			for(Material currentMaterial: tracked_placed_materials)
+				if(!metaData.getColumns(null, null, null, "placed" + currentMaterial).next())
+					newColumnNames.add("placed" + currentMaterial);
 			
 			if(newColumnNames.size() > 0)
 			{
@@ -50,6 +54,7 @@ public class StatisticsRepository implements Repository
 			}
 			
 			trackedMinedMaterials = tracked_mined_materials;
+			trackedPlacedMaterials = tracked_placed_materials;
 			
 		}
 		catch(SQLException e)
@@ -67,12 +72,18 @@ public class StatisticsRepository implements Repository
 	{
 		queryResult = queryExecutor.executeQuery("SELECT UUID FROM PlayerStats WHERE UUID = '" + UUID + "'");
 		if(!queryResult.next())
-			queryExecutor.execute("INSERT INTO playerstats(UUID) VALUES('" + UUID + "')");
+			queryExecutor.execute("INSERT INTO PlayerStats(UUID) VALUES('" + UUID + "')");
 	}
 	
 	public void incrementMinedCount(String UUID, Material blockType) throws SQLException
 	{
 		if(trackedMinedMaterials.contains(blockType))
-			queryExecutor.execute("UPDATE playerstats SET mined" + blockType + " = mined" + blockType + " + 1 WHERE UUID = '" + UUID + "'");
+			queryExecutor.execute("UPDATE PlayerStats SET mined" + blockType + " = mined" + blockType + " + 1 WHERE UUID = '" + UUID + "'");
+	}
+	
+	public void incrementPlacedCount(String UUID, Material blockType) throws SQLException
+	{
+		if(trackedPlacedMaterials.contains(blockType))
+			queryExecutor.execute("UPDATE PlayerStats SET placed" + blockType + " = placed" + blockType + " + 1 WHERE UUID = '" + UUID + "'");
 	}
 }
