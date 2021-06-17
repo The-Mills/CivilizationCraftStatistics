@@ -6,14 +6,20 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.logging.Logger;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.configuration.file.FileConfiguration;
 import repository.Repository;
 import repository.StatisticsRepository;
+import statistics_tracker.CommandReboot.RebootError;
 
 public class CivilizationCraftStatistics extends JavaPlugin
 {
+	public static CivilizationCraftStatistics plugin;
+	public static Logger logger;
+	public static FileConfiguration config;
+	
 	private Repository statisticsRepository = new StatisticsRepository();
 	
 	/**
@@ -22,34 +28,46 @@ public class CivilizationCraftStatistics extends JavaPlugin
 	@Override
 	public void onEnable()
 	{	
-		if(doesConfigExist())
+		plugin = this;
+		logger = plugin.getLogger();
+		plugin.getCommand("civStatsTrackerReboot").setExecutor(new CommandReboot());
+		onEnableDoesConfigExist();
+	}
+	
+	/**
+	 * Determines whether the plugin's config.yml file exists in the correct directory.
+	 * If it does exist, advance to the next step of the plugin boot-up process.
+	 * Else, halt plugin execution and throw an error.
+	 */
+	public void onEnableDoesConfigExist()
+	{
+		File configPath = new File(getDataFolder(), "config.yml");
+		if(configPath.exists())
 		{
-			getLogger().info("./plugins/CivilizationCraftStatisticsTracker/config.yml found. "
-					+ "Performing setup operations");
-			
-			statisticsRepository.openConnection(getRepositoryCredentials(), getMaterialList("tracked-mined-materials"), getMaterialList("tracked-placed-materials"), getLogger());
-			getServer().getPluginManager().registerEvents(new EventListener(statisticsRepository), this);
-			
-			getLogger().info("Connection and setup process complete.");
+			onEnableReadConfig();
 		}
 		else
 		{
-			getLogger().info("ERROR: ./plugins/CivilizationCraftStatisticsTracker/config.yml not found. "
-					+ "Cannot connect to database or perform critical setup operations!");
+			CommandReboot.logError(RebootError.MISSING_CONFIG);
 		}
 	}
 	
-
-	/**
-	 * Determines whether the plugin's config.yml file exists in the correct directory.
-	 * @return - True if config.yml exists in the proper directory, else false.
-	 */
-	public boolean doesConfigExist()
+	public void onEnableReadConfig()
 	{
-		File filePath = new File(getDataFolder(), "config.yml");
-		if(!getDataFolder().exists() || !filePath.exists())
-			 return false;
-		return true;
+		getLogger().info("./plugins/CivilizationCraftStatisticsTracker/config.yml found. "
+				+ "Performing setup operations");
+		
+		try
+		{
+			statisticsRepository.openConnection(getRepositoryCredentials(), getMaterialList("tracked-mined-materials"), getMaterialList("tracked-placed-materials"), getLogger());
+			getServer().getPluginManager().registerEvents(new EventListener(statisticsRepository), this);
+			getLogger().info("Connection and setup process complete.");
+		}
+		catch(SQLException e)
+		{
+			getLogger().info("FATAL ERROR: Failed to connect to database. See the below exception:");
+			getLogger().info(e.toString());
+		}
 	}
 	
 	/**

@@ -26,6 +26,7 @@ public class EventListener implements Listener
 	@EventHandler
 	public void onMineBlock(BlockBreakEvent event)
 	{
+		System.out.println(event.getBlock().getType());
 		try 
 		{
 			statisticsRepository.incrementMinedCount(event.getPlayer().getUniqueId().toString(), event.getBlock().getType());
@@ -46,6 +47,7 @@ public class EventListener implements Listener
 	@EventHandler
 	public void onPlaceBlock(BlockPlaceEvent event)
 	{
+		System.out.println(event.getBlock().getType());
 		try
 		{
 			statisticsRepository.incrementPlacedCount(event.getPlayer().getUniqueId().toString(), event.getBlock().getType());

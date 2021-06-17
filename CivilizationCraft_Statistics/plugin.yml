@@ -2,3 +2,8 @@ name: CivilizationCraftStatisticsTracker
 main: statistics_tracker.CivilizationCraftStatistics
 version: 1.0
 api-version: 1.16
+commands:
+   civStatsTrackerReboot:
+      description: Attempts to reboot and recover CivilizationCraftStatisticsTracker from various errors that lead to plugin failure.
+      usage: /civStatsTrackerReboot <showError/autoReboot>
+      permission: CivilizationCraftStatisticsTracker.administrator

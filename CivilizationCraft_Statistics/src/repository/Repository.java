@@ -15,8 +15,9 @@ public interface Repository
 	 * @param tracked_mined_materials - List of Materials that will be tracked when a player breaks them and triggers a BlockBreakEvent
 	 * @param tracked_placed_materials - List of Materials that will be tracked when a player places them and triggers a BlockPlaceEvent
 	 * @param pluginLogger - The plugin's logger.
+	 * @throws SQLException
 	 */
-	void openConnection(Map<String, String> credentials, List<Material> tracked_mined_materials, List<Material> tracked_placed_materials, Logger pluginLogger);
+	void openConnection(Map<String, String> credentials, List<Material> tracked_mined_materials, List<Material> tracked_placed_materials, Logger pluginLogger) throws SQLException;
 	
 
 	/**
@@ -29,7 +30,7 @@ public interface Repository
 	/**
 	 * Adds a new player's UUID to the statistics database.
 	 * @param UUID - The player's 36 character UUID.
-	 * @throws SQLException - Most likely caused by the player's UUID already being in the database.
+	 * @throws SQLException
 	 */
 	void registerNewUser(String UUID) throws SQLException;
 
