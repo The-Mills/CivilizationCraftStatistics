@@ -3,7 +3,15 @@ main: statistics_tracker.CivilizationCraftStatistics
 version: 1.0
 api-version: 1.16
 commands:
-   civStatsTrackerReboot:
-      description: Attempts to reboot and recover CivilizationCraftStatisticsTracker from various errors that lead to plugin failure.
-      usage: /civStatsTrackerReboot <showError/autoReboot>
+   civStatsAdmin:
+      description: List and use CCST admin commands.
+      usage: |
+         
+         /<command> - Lists and describes all admin commands.
+         /<command> [command] - Executes specific command.
       permission: CivilizationCraftStatisticsTracker.administrator
+      permission-message: "Unknown command. Type \"/help\" for help."
+permissions:
+   CivilizationCraftStatisticsTracker.administrator:
+      description: Allows use of civStatsAdmin commands.
+      default: op

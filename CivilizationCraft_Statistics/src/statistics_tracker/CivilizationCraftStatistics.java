@@ -8,29 +8,32 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.logging.Logger;
 import org.bukkit.Material;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.configuration.file.FileConfiguration;
 import repository.Repository;
 import repository.StatisticsRepository;
-import statistics_tracker.CommandReboot.RebootError;
 
 public class CivilizationCraftStatistics extends JavaPlugin
 {
 	public static CivilizationCraftStatistics plugin;
 	public static Logger logger;
+	public static PluginDescriptionFile description;
 	public static FileConfiguration config;
 	
 	private Repository statisticsRepository = new StatisticsRepository();
 	
 	/**
-	 * Fired when the plugin is enabled
+	 * Fired when the plugin is enabled.
+	 * Initializes all parts of the plugin that are independent of the database connection.
 	 */
 	@Override
 	public void onEnable()
 	{	
 		plugin = this;
 		logger = plugin.getLogger();
-		plugin.getCommand("civStatsTrackerReboot").setExecutor(new CommandReboot());
+		description = plugin.getDescription();
+		plugin.getCommand(CommandCivStatsAdmin.NAME).setExecutor(new CommandCivStatsAdmin());
 		onEnableDoesConfigExist();
 	}
 	
@@ -43,19 +46,23 @@ public class CivilizationCraftStatistics extends JavaPlugin
 	{
 		File configPath = new File(getDataFolder(), "config.yml");
 		if(configPath.exists())
-		{
-			onEnableReadConfig();
-		}
+			onEnableValidateConfig();
 		else
-		{
-			CommandReboot.logError(RebootError.MISSING_CONFIG);
-		}
+			ConnectionError.reportErrorStatus(ConnectionError.MISSING_CONFIG);
 	}
 	
-	public void onEnableReadConfig()
+	
+	
+	/*
+	 * NOT REVISED BELOW
+	 */
+	
+	
+	
+	
+	public void onEnableValidateConfig()
 	{
-		getLogger().info("./plugins/CivilizationCraftStatisticsTracker/config.yml found. "
-				+ "Performing setup operations");
+		getLogger().info("config.yml found. Performing setup operations");
 		
 		try
 		{
