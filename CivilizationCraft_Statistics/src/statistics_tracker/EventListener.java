@@ -6,14 +6,14 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import repository.Repository;
+import repository.DeprecatedRepository;
 
 
 public class EventListener implements Listener
 {
-	private Repository statisticsRepository;
+	private DeprecatedRepository statisticsRepository;
 	
-	public EventListener(Repository statsRepo)
+	public EventListener(DeprecatedRepository statsRepo)
 	{
 		statisticsRepository = statsRepo;
 	}

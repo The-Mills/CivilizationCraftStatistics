@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 import org.bukkit.Material;
 
-public class StatisticsRepository implements Repository
+public class DeprecatedStatisticsRepository implements DeprecatedRepository
 {
 	private Connection mySQLConnection;
 	private Statement queryExecutor;

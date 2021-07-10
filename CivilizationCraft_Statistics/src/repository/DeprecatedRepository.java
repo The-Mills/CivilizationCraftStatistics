@@ -6,9 +6,8 @@ import java.util.Map;
 import java.util.logging.Logger;
 import org.bukkit.Material;
 
-public interface Repository 
+public interface DeprecatedRepository 
 {
-
 	/**
 	 * Performs the initial connection to the database server and creates any needed columns. Must be called before using any other methods.
 	 * @param credentials - Necessary credentials for the database server: IP address, port, database name, username, and password.

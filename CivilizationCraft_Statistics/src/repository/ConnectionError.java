@@ -1,9 +1,19 @@
-package statistics_tracker;
+package repository;
 
+/**
+ * Describes all possible states of the database connection using errors.
+ * 
+ * TO ADD A NEW ERROR:
+ * 1. Define it here.
+ * 2. Define how to resolve it in CommandCivStatsAdmin.onCommandAutoReboot()
+ * 
+ * @author Daniel Milligan
+ */
 public enum ConnectionError 
 {
 	NORMAL("No database connection errors detected."),
-	MISSING_CONFIG("The configuration file ./plugins/CivilizationCraftStatisticsTracker/config.yml does not exist. Cannot connect to database or perform critical setup operations.");
+	PENDING("Currently opening or repairing connection."),
+	UNINITIALIZED("No attempt has been made to initialize the database connection.");
 	
 	private final String errorDescription;
 	
@@ -14,24 +24,5 @@ public enum ConnectionError
 	public String toString()
 	{
 		return name() + " - " + errorDescription;
-	}
-	
-	
-	private static ConnectionError currentStatus = NORMAL;
-	
-	public static void reportErrorStatus(ConnectionError error)
-	{
-		CivilizationCraftStatistics.logger.info("CONNECTION ERROR: " + error.toString() + " Reboot after fixing with /civStatsAdmin autoReboot");
-		currentStatus = error;
-	}
-	
-	public static void setNormalStatus()
-	{
-		currentStatus = NORMAL;
-	}
-	
-	public static ConnectionError getCurrentStatus()
-	{
-		return currentStatus;
 	}
 }
